@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class LeaderboardSystem {
+public:
+    static vector<int> GetTopScores(const vector<int>& scores, int m) {
+        if (scores.empty() || m <= 0) {
+            return {};
+        }
+
+       
+        vector<int> sortedScores(scores);
+        sort(sortedScores.begin(), sortedScores.end(), greater<int>());
+        m = min(m, static_cast<int>(sortedScores.size()));
+        vector<int> topScores(sortedScores.begin(), sortedScores.begin() + m);
+        return topScores;
+    }
+};
+
+// 测试用例
+#include <cassert>
+
+void TestGetTopScores() {
+    // 测试案例
+    vector<int> scores1 = {100, 50, 75, 80, 65};
+    auto result1 = LeaderboardSystem::GetTopScores(scores1, 3);
+    assert((result1 == vector<int>{100, 80, 75}));
+
+    vector<int> scores2 = {};
+    auto result2 = LeaderboardSystem::GetTopScores(scores2, 2);
+    assert(result2.empty());
+
+    vector<int> scores3 = {30, 20, 10};
+    auto result3 = LeaderboardSystem::GetTopScores(scores3, 5);
+    assert((result3 == vector<int>{30, 20, 10}));
+
+    vector<int> scores4 = {90};
+    auto result4 = LeaderboardSystem::GetTopScores(scores4, 1);
+    assert((result4 == vector<int>{90}));
+
+    vector<int> scores5 = {10, 20, 30, 40, 50};
+    auto result5 = LeaderboardSystem::GetTopScores(scores5, 0);
+    assert(result5.empty());
+}
+
+int main() {
+    TestGetTopScores();
+    cout << "所有测试通过！" << endl;
+    return 0;
+}

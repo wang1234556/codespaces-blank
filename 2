@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class EnergyFieldSystem {
+public:
+    static double MaxEnergyField(const vector<int>& heights) {
+        int left = 0, right = heights.size() - 1;
+        double maxArea = 0.0;
+
+        while (left < right) {
+            // 计算当前梯形的面积
+            double height = min(heights[left], heights[right]);
+            double width = right - left;
+            double area = (height + heights[right]) * width / 2.0;
+            maxArea = max(maxArea, area);
+
+            // 移动较矮的一侧
+            if (heights[left] < heights[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return maxArea;
+    }
+};
+
+// 单元测试
+#include <cassert>
+
+void TestMaxEnergyField() {
+    // 测试案例
+    vector<int> heights1 = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+    assert(abs(EnergyFieldSystem::MaxEnergyField(heights1) - 52.5) < 1e-9);
+
+    vector<int> heights2 = {1, 1};
+    assert(abs(EnergyFieldSystem::MaxEnergyField(heights2) - 1.0) < 1e-9);
+
+    vector<int> heights3 = {4, 3, 2, 1, 4};
+    assert(abs(EnergyFieldSystem::MaxEnergyField(heights3) - 16.0) < 1e-9);
+
+    vector<int> heights4 = {1, 2, 1, 2, 1, 2, 1};
+    assert(abs(EnergyFieldSystem::MaxEnergyField(heights4) - 6.0) < 1e-9);
+}
+
+int main() {
+    TestMaxEnergyField();
+    cout << "所有测试通过！" << endl;
+    return 0;
+}
